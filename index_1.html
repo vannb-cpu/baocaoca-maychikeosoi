@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Báo cáo ca — Máy chỉ kéo sợi</title>
+<style>
+  :root{
+    --ink:#1c2430;
+    --ink-soft:#4b5563;
+    --line:#dfe3e8;
+    --paper:#f4f5f3;
+    --card:#ffffff;
+    --navy:#1e3a4c;
+    --navy-deep:#152834;
+    --amber:#d97b1f;
+    --amber-deep:#b6650f;
+    --good:#2f7d5a;
+    --bad:#b23b3b;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    padding-top:env(safe-area-inset-top,0px);
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  header.top{
+    background:linear-gradient(180deg,var(--navy) 0%,var(--navy-deep) 100%);
+    color:#fff;
+    padding:22px 20px 26px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute;
+    right:-40px; top:-40px;
+    width:160px; height:160px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.06);
+  }
+  header.top .eyebrow{
+    font-size:13px;
+    color:#a9c2cf;
+    letter-spacing:.02em;
+    margin:0 0 6px;
+  }
+  header.top h1{
+    font-size:21px;
+    line-height:1.3;
+    margin:0 0 8px;
+    font-weight:700;
+  }
+  header.top p{
+    margin:0;
+    font-size:13.5px;
+    color:#c7d6dd;
+    line-height:1.5;
+    max-width:46ch;
+  }
+
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:16px 14px 110px;
+  }
+
+  .section{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    margin-bottom:14px;
+    overflow:hidden;
+  }
+  .section-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 16px;
+    border-bottom:1px solid var(--line);
+    background:#fbfbfa;
+  }
+  .section-head .num{
+    width:26px;height:26px;
+    border-radius:50%;
+    background:var(--navy);
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+  }
+  .section-head h2{
+    font-size:14.5px;
+    margin:0;
+    font-weight:700;
+    letter-spacing:.01em;
+    color:var(--navy-deep);
+  }
+  .section-body{padding:16px;}
+
+  .field{margin-bottom:18px;}
+  .field:last-child{margin-bottom:0;}
+  .field label.q{
+    display:block;
+    font-size:14.5px;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:8px;
+    line-height:1.4;
+  }
+  .field .hint{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin:-4px 0 8px;
+  }
+  .req{color:var(--bad); margin-left:2px;}
+
+  input[type=text],
+  input[type=number],
+  input[type=date],
+  select,
+  textarea{
+    width:100%;
+    font-size:16px;
+    padding:12px 13px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    background:#fff;
+    color:var(--ink);
+    font-family:inherit;
+  }
+  textarea{resize:vertical;min-height:70px;}
+  input:focus,select:focus,textarea:focus{
+    outline:none;
+    border-color:var(--navy);
+    box-shadow:0 0 0 3px rgba(30,58,76,0.12);
+  }
+
+  .choice-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .choice-grid.cols-2 .choice{flex:1 1 calc(50% - 4px);}
+  .choice-grid.cols-3 .choice{flex:1 1 calc(33.333% - 6px);}
+  .choice-grid.cols-6 .choice{flex:1 1 calc(16.666% - 7px); min-width:44px;}
+
+  .choice{
+    position:relative;
+  }
+  .choice input{
+    position:absolute;
+    opacity:0;
+    width:100%;height:100%;
+    margin:0;
+    cursor:pointer;
+  }
+  .choice .box{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:11px 8px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink);
+    background:#fff;
+    min-height:44px;
+    line-height:1.3;
+  }
+  .choice input:checked + .box{
+    border-color:var(--navy);
+    background:var(--navy);
+    color:#fff;
+  }
+  .choice input:focus-visible + .box{
+    box-shadow:0 0 0 3px rgba(30,58,76,0.25);
+  }
+
+  .other-row{
+    margin-top:10px;
+  }
+
+  .helper-note{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    background:#f1f4f2;
+    border:1px dashed #c9d2cd;
+    border-radius:8px;
+    padding:8px 10px;
+    margin-top:8px;
+  }
+
+  footer.bar{
+    position:fixed;
+    left:0;right:0;bottom:0;
+    background:#fff;
+    border-top:1px solid var(--line);
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));
+    display:flex;
+    justify-content:center;
+  }
+  button.submit{
+    width:100%;
+    max-width:640px;
+    background:var(--amber);
+    color:#fff;
+    border:none;
+    padding:15px 20px;
+    font-size:16px;
+    font-weight:700;
+    border-radius:12px;
+    cursor:pointer;
+  }
+  button.submit:active{background:var(--amber-deep);}
+  button.submit:disabled{background:#c9b9a5;cursor:not-allowed;}
+
+  .error-msg{
+    font-size:12.5px;
+    color:var(--bad);
+    margin-top:6px;
+    display:none;
+  }
+  .field.invalid label.q{color:var(--bad);}
+  .field.invalid .error-msg{display:block;}
+  .field.invalid input[type=text],
+  .field.invalid input[type=number],
+  .field.invalid input[type=date],
+  .field.invalid select,
+  .field.invalid textarea{border-color:var(--bad);}
+
+  #successScreen{
+    display:none;
+    max-width:640px;
+    margin:60px auto;
+    padding:40px 24px;
+    text-align:center;
+  }
+  #successScreen .tick{
+    width:64px;height:64px;
+    border-radius:50%;
+    background:var(--good);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 18px;
+    font-size:30px;
+  }
+  #successScreen h2{margin:0 0 8px;font-size:19px;color:var(--navy-deep);}
+  #successScreen p{margin:0 0 22px;color:var(--ink-soft);font-size:14px;}
+  #successScreen button{
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    padding:12px 22px;
+    border-radius:10px;
+    font-size:14.5px;
+    font-weight:600;
+    cursor:pointer;
+  }
+
+  #banner{
+    display:none;
+    max-width:640px;
+    margin:12px auto 0;
+    padding:10px 14px;
+    border-radius:10px;
+    font-size:13px;
+    background:#fdecec;
+    color:var(--bad);
+    border:1px solid #f3caca;
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <p class="eyebrow">Nhà máy Yên Bái · Xưởng Máy chỉ kéo sợi</p>
+  <h1>BÁO CÁO CA — MÁY CHỈ KÉO SỢI</h1>
+  <p>Tổ trưởng ca điền và gửi khi kết thúc ca.</p>
+</header>
+
+<div id="banner"></div>
+
+<main id="formWrap">
+  <form id="reportForm" novalidate>
+
+    <!-- MỤC 1 -->
+    <div class="section">
+      <div class="section-head"><div class="num">1</div><h2>Thông tin ca</h2></div>
+      <div class="section-body">
+
+        <div class="field" data-required="true" data-name="Ca làm việc">
+          <label class="q">Ca làm việc<span class="req">*</span></label>
+          <div class="choice-grid cols-2">
+            <label class="choice"><input type="radio" name="ca_lam_viec" value="Ca ngày"><span class="box">Ca ngày</span></label>
+            <label class="choice"><input type="radio" name="ca_lam_viec" value="Ca đêm"><span class="box">Ca đêm</span></label>
+          </div>
+          <div class="error-msg">Chọn ca làm việc.</div>
+        </div>
+
+        <div class="field" data-required="true" data-name="Ngày sản xuất">
+          <label class="q">Ngày sản xuất<span class="req">*</span></label>
+          <input type="date" name="ngay_san_xuat">
+          <div class="error-msg">Nhập ngày sản xuất.</div>
+        </div>
+
+        <div class="field" data-required="true" data-name="Thuộc nhà máy nào">
+          <label class="q">Thuộc nhà máy nào<span class="req">*</span></label>
+          <div class="choice-grid cols-2">
+            <label class="choice"><input type="radio" name="nha_may" value="Bạt"><span class="box">Bạt</span></label>
+            <label class="choice"><input type="radio" name="nha_may" value="Bao Bì"><span class="box">Bao Bì</span></label>
+          </div>
+          <div class="error-msg">Chọn nhà máy.</div>
+        </div>
+
+        <div class="field" data-required="true" data-name="Máy số">
+          <label class="q">Máy số<span class="req">*</span></label>
+          <div class="choice-grid cols-6">
+            <label class="choice"><input type="radio" name="may_so" value="1"><span class="box">1</span></label>
+            <label class="choice"><input type="radio" name="may_so" value="2"><span class="box">2</span></label>
+            <label class="choice"><input type="radio" name="may_so" value="3"><span class="box">3</span></label>
+            <label class="choice"><input type="radio" name="may_so" value="4"><span class="box">4</span></label>
+            <label class="choice"><input type="radio" name="may_so" value="5"><span class="box">5</span></label>
+            <label class="choice"><input type="radio" name="may_so" value="6"><span class="box">6</span></label>
+          </div>
+          <div class="error-msg">Chọn máy số.</div>
+        </div>
+
+        <div class="field" data-required="true" data-name="Họ tên trưởng ca">
+          <label class="q">Họ tên trưởng ca<span class="req">*</span></label>
+          <input type="text" name="ho_ten_truong_ca" placeholder="Nhập họ tên">
+          <div class="error-msg">Nhập họ tên trưởng ca.</div>
+        </div>
+
+        <div class="field" data-name="Số người làm trong ca">
+          <label class="q">Số người làm trong ca</label>
+          <input type="number" inputmode="numeric" name="so_nguoi_lam" placeholder="Ví dụ: 3">
+        </div>
+
+        <div class="field" data-required="true" data-name="Mã sản phẩm/loại chỉ đang chạy">
+          <label class="q">Mã sản phẩm/loại chỉ đang chạy<span class="req">*</span></label>
+          <select name="ma_san_pham">
+            <option value="" disabled selected>— Chọn mã —</option>
+            <option value="440NXK">440NXK</option>
+            <option value="575TXK">575TXK</option>
+            <option value="520 XPT">520 XPT</option>
+            <option value="500 XPT">500 XPT</option>
+            <option value="670D">670D</option>
+            <option value="750XKA">750XKA</option>
+            <option value="610XKA">610XKA</option>
+            <option value="850TC">850TC</option>
+            <option value="440TTXK">440TTXK</option>
+            <option value="620B">620B</option>
+            <option value="530URE">530URE</option>
+            <option value="650TPT">650TPT</option>
+            <option value="840TC">840TC</option>
+          </select>
+          <div class="error-msg">Chọn mã sản phẩm.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MỤC 2 -->
+    <div class="section">
+      <div class="section-head"><div class="num">2</div><h2>Nguyên liệu &amp; sản lượng</h2></div>
+      <div class="section-body">
+
+        <div class="field" data-required="true" data-name="Loại nguyên liệu">
+          <label class="q">Loại nguyên liệu<span class="req">*</span></label>
+          <div class="choice-grid cols-2">
+            <label class="choice"><input type="radio" name="loai_nguyen_lieu" value="Phế PP"><span class="box">Phế PP</span></label>
+            <label class="choice"><input type="radio" name="loai_nguyen_lieu" value="Nguyên sinh"><span class="box">Nguyên sinh</span></label>
+            <label class="choice"><input type="radio" name="loai_nguyen_lieu" value="Taical"><span class="box">Taical</span></label>
+            <label class="choice"><input type="radio" name="loai_nguyen_lieu" value="Phối trộn"><span class="box">Phối trộn</span></label>
+          </div>
+          <div class="other-row">
+            <input type="text" name="loai_nguyen_lieu_khac" placeholder="Khác (nếu có, ghi rõ)">
+          </div>
+          <div class="error-msg">Chọn hoặc ghi rõ loại nguyên liệu.</div>
+        </div>
+
+        <div class="field" data-name="Lượng nguyên liệu tiêu hao trong ca (kg)">
+          <label class="q">Lượng nguyên liệu tiêu hao trong ca (kg)</label>
+          <input type="number" inputmode="decimal" name="nl_tieu_hao_kg">
+        </div>
+
+        <div class="field" data-required="true" data-name="Sản lượng thành phẩm trong ca (kg)">
+          <label class="q">Sản lượng thành phẩm trong ca (kg)<span class="req">*</span></label>
+          <input type="number" inputmode="decimal" name="san_luong_kg">
+          <div class="error-msg">Nhập sản lượng thành phẩm.</div>
+        </div>
+
+        <div class="field" data-name="Số cuộn sợi hoàn thành">
+          <label class="q">Số cuộn sợi hoàn thành</label>
+          <input type="number" inputmode="numeric" name="so_cuon_soi">
+        </div>
+
+        <div class="field" data-name="Lượng phế thải ra trong ca (kg)">
+          <label class="q">Lượng phế thải ra trong ca (kg)</label>
+          <input type="number" inputmode="decimal" name="phe_thai_kg">
+        </div>
+
+        <div class="field" data-name="Lượng nguyên liệu múc ra / nguyên liệu dở dang (kg)">
+          <label class="q">Lượng nguyên liệu múc ra / nguyên liệu dở dang (kg)</label>
+          <input type="number" inputmode="decimal" name="nl_do_dang_kg">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MỤC 3 -->
+    <div class="section">
+      <div class="section-head"><div class="num">3</div><h2>Vận hành &amp; bảo trì trong ca</h2></div>
+      <div class="section-body">
+
+        <div class="field" data-required="true" data-name="Số lần thay lưới sơ cấp trong ca">
+          <label class="q">Số lần thay lưới sơ cấp trong ca<span class="req">*</span></label>
+          <input type="number" inputmode="numeric" name="thay_luoi_so_cap">
+          <div class="error-msg">Nhập số lần thay lưới sơ cấp.</div>
+        </div>
+
+        <div class="field" data-name="Số lần thay lưới thứ cấp trong ca">
+          <label class="q">Số lần thay lưới thứ cấp trong ca</label>
+          <input type="number" inputmode="numeric" name="thay_luoi_thu_cap">
+        </div>
+
+        <div class="field" data-required="true" data-name="Tổng thời gian dừng máy trong ca (phút)">
+          <label class="q">Tổng thời gian dừng máy trong ca (phút)<span class="req">*</span></label>
+          <input type="number" inputmode="numeric" name="thoi_gian_dung_may">
+          <div class="error-msg">Nhập tổng thời gian dừng máy (có thể ghi 0).</div>
+        </div>
+
+        <div class="field" data-name="Lý do dừng máy">
+          <label class="q">Lý do dừng máy</label>
+          <div class="hint">Có thể chọn nhiều lý do.</div>
+          <div class="choice-grid cols-2">
+            <label class="choice"><input type="checkbox" name="ly_do_dung_may" value="Thay lưới"><span class="box">Thay lưới</span></label>
+            <label class="choice"><input type="checkbox" name="ly_do_dung_may" value="Đổi chỉ"><span class="box">Đổi chỉ</span></label>
+            <label class="choice"><input type="checkbox" name="ly_do_dung_may" value="Sự cố thiết bị"><span class="box">Sự cố thiết bị</span></label>
+            <label class="choice"><input type="checkbox" name="ly_do_dung_may" value="Vệ sinh bể - lưới"><span class="box">Vệ sinh bể - lưới</span></label>
+            <label class="choice"><input type="checkbox" name="ly_do_dung_may" value="Mất điện"><span class="box">Mất điện</span></label>
+            <label class="choice"><input type="checkbox" name="ly_do_dung_may" value="Thiếu nguyên liệu"><span class="box">Thiếu nguyên liệu</span></label>
+            <label class="choice"><input type="checkbox" name="ly_do_dung_may" value="Chờ xe nâng"><span class="box">Chờ xe nâng</span></label>
+          </div>
+          <div class="other-row">
+            <input type="text" name="ly_do_dung_may_khac" placeholder="Khác (nếu có, ghi rõ)">
+          </div>
+        </div>
+
+        <div class="field" data-name="Vệ sinh/thông lỗ hút chân không">
+          <label class="q">Vệ sinh/thông lỗ hút chân không</label>
+          <div class="hint">Chỉ máy chỉ 1, 2</div>
+          <div class="choice-grid cols-3">
+            <label class="choice"><input type="radio" name="ve_sinh_hut_chan_khong" value="Có"><span class="box">Có</span></label>
+            <label class="choice"><input type="radio" name="ve_sinh_hut_chan_khong" value="không"><span class="box">Không</span></label>
+            <label class="choice"><input type="radio" name="ve_sinh_hut_chan_khong" value="không áp dụng"><span class="box">Không áp dụng</span></label>
+          </div>
+        </div>
+
+        <div class="field" data-required="true" data-name="Có sự cố thiết bị không?">
+          <label class="q">Có sự cố thiết bị không?<span class="req">*</span></label>
+          <div class="choice-grid cols-2">
+            <label class="choice"><input type="radio" name="co_su_co" value="Có"><span class="box">Có</span></label>
+            <label class="choice"><input type="radio" name="co_su_co" value="Không"><span class="box">Không</span></label>
+          </div>
+          <div class="error-msg">Chọn có/không.</div>
+        </div>
+
+        <div class="field" data-name="Mô tả sự cố thiết bị (nếu có)">
+          <label class="q">Mô tả sự cố thiết bị (nếu có)</label>
+          <textarea name="mo_ta_su_co"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MỤC 4 -->
+    <div class="section">
+      <div class="section-head"><div class="num">4</div><h2>Chất lượng sợi</h2></div>
+      <div class="section-body">
+
+        <div class="field" data-name="Kiểm tra lực kéo (máy cân lực)">
+          <label class="q">Kiểm tra lực kéo (máy cân lực)</label>
+          <div class="choice-grid cols-3">
+            <label class="choice"><input type="radio" name="luc_keo" value="Đạt"><span class="box">Đạt</span></label>
+            <label class="choice"><input type="radio" name="luc_keo" value="Không đạt"><span class="box">Không đạt</span></label>
+            <label class="choice"><input type="radio" name="luc_keo" value="Chưa kiểm tra"><span class="box">Chưa kiểm tra</span></label>
+          </div>
+        </div>
+
+        <div class="field" data-name="Định lượng/bản sợi">
+          <label class="q">Định lượng/bản sợi</label>
+          <div class="choice-grid cols-3">
+            <label class="choice"><input type="radio" name="dinh_luong_ban_soi" value="Đạt"><span class="box">Đạt</span></label>
+            <label class="choice"><input type="radio" name="dinh_luong_ban_soi" value="Lệch nhẹ"><span class="box">Lệch nhẹ</span></label>
+            <label class="choice"><input type="radio" name="dinh_luong_ban_soi" value="Không đạt"><span class="box">Không đạt</span></label>
+          </div>
+        </div>
+
+        <div class="field" data-name="Độ xơ xước sợi">
+          <label class="q">Độ xơ xước sợi</label>
+          <div class="choice-grid cols-3">
+            <label class="choice"><input type="radio" name="do_xo_xuoc" value="Tốt"><span class="box">Tốt</span></label>
+            <label class="choice"><input type="radio" name="do_xo_xuoc" value="Nhẹ"><span class="box">Nhẹ</span></label>
+            <label class="choice"><input type="radio" name="do_xo_xuoc" value="Nhiều"><span class="box">Nhiều</span></label>
+          </div>
+        </div>
+
+        <div class="field" data-name="Lỗi sợi phát hiện (mô tả)">
+          <label class="q">Lỗi sợi phát hiện (mô tả)</label>
+          <textarea name="loi_soi_phat_hien"></textarea>
+        </div>
+
+        <div class="field" data-name="Bù chỉ lỗi bên dệt trả trong ca (kg)">
+          <label class="q">Bù chỉ lỗi bên dệt trả trong ca (kg)</label>
+          <input type="number" inputmode="decimal" name="bu_chi_loi_kg">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MỤC 5 -->
+    <div class="section">
+      <div class="section-head"><div class="num">5</div><h2>Bàn giao ca</h2></div>
+      <div class="section-body">
+
+        <div class="field" data-required="true" data-name="Tình trạng máy cuối ca">
+          <label class="q">Tình trạng máy cuối ca<span class="req">*</span></label>
+          <div class="choice-grid cols-2">
+            <label class="choice"><input type="radio" name="tinh_trang_may" value="Đang chạy bình thường"><span class="box">Đang chạy bình thường</span></label>
+            <label class="choice"><input type="radio" name="tinh_trang_may" value="Dừng theo kế hoạch"><span class="box">Dừng theo kế hoạch</span></label>
+            <label class="choice"><input type="radio" name="tinh_trang_may" value="Dừng cho sự cố"><span class="box">Dừng cho sự cố</span></label>
+          </div>
+          <div class="error-msg">Chọn tình trạng máy cuối ca.</div>
+        </div>
+
+        <div class="field" data-name="Đề xuất nguyên liệu/vật tư cho ca sau">
+          <label class="q">Đề xuất nguyên liệu/vật tư cho ca sau</label>
+          <textarea name="de_xuat_ca_sau"></textarea>
+        </div>
+
+        <div class="field" data-name="Ghi chú/kiến nghị khác">
+          <label class="q">Ghi chú/kiến nghị khác</label>
+          <textarea name="ghi_chu_khac"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+  </form>
+</main>
+
+<div id="successScreen">
+  <div class="tick">✓</div>
+  <h2>Đã gửi báo cáo</h2>
+  <p>Cảm ơn tổ trưởng ca. Báo cáo đã được ghi nhận.</p>
+  <button id="btnAgain" type="button">Gửi báo cáo mới</button>
+</div>
+
+<footer class="bar" id="submitBar">
+  <button class="submit" id="btnSubmit" type="button">Gửi báo cáo</button>
+</footer>
+
+<script>
+  // TODO: thay bằng URL /exec thật của Apps Script Web App sau khi dựng backend.
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzP3BepKVrUfZaKPKl6nsu2DBoOSAoztCIs1UEncU2pCijNgZCqrQQmdafPbx2RHe_88g/exec";
+
+  const form = document.getElementById('reportForm');
+  const btnSubmit = document.getElementById('btnSubmit');
+  const banner = document.getElementById('banner');
+
+  function showBanner(msg){
+    banner.textContent = msg;
+    banner.style.display = 'block';
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  function hideBanner(){ banner.style.display = 'none'; }
+
+  function clearErrors(){
+    form.querySelectorAll('.field.invalid').forEach(f => f.classList.remove('invalid'));
+  }
+
+  function validate(){
+    clearErrors();
+    let firstInvalid = null;
+    let ok = true;
+
+    form.querySelectorAll('.field[data-required="true"]').forEach(field => {
+      const name = field.dataset.name;
+      let filled = false;
+
+      const radios = field.querySelectorAll('input[type=radio]');
+      if(radios.length){
+        filled = Array.from(radios).some(r => r.checked);
+      } else {
+        const el = field.querySelector('input[type=text], input[type=number], input[type=date], select, textarea');
+        if(el){ filled = el.value !== null && el.value.toString().trim() !== ''; }
+      }
+
+      // "Loại nguyên liệu" cũng hợp lệ nếu điền ô "Khác"
+      if(!filled && field.dataset.name === 'Loại nguyên liệu'){
+        const khac = field.querySelector('input[name="loai_nguyen_lieu_khac"]');
+        filled = khac && khac.value.trim() !== '';
+      }
+
+      if(!filled){
+        field.classList.add('invalid');
+        ok = false;
+        if(!firstInvalid) firstInvalid = field;
+      }
+    });
+
+    if(firstInvalid){
+      firstInvalid.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+    return ok;
+  }
+
+  function collectPayload(){
+    const fd = new FormData(form);
+    const data = {};
+    for(const [key, value] of fd.entries()){
+      if(data[key] !== undefined){
+        // gộp nhiều giá trị (checkbox) thành chuỗi phân tách bởi dấu phẩy
+        data[key] = Array.isArray(data[key]) ? [...data[key], value] : [data[key], value];
+      } else {
+        data[key] = value;
+      }
+    }
+    Object.keys(data).forEach(k => {
+      if(Array.isArray(data[k])) data[k] = data[k].join(', ');
+    });
+    return data;
+  }
+
+  btnSubmit.addEventListener('click', async () => {
+    hideBanner();
+    if(!validate()){
+      showBanner('Vui lòng điền đủ các mục có dấu * trước khi gửi.');
+      return;
+    }
+
+    const payload = collectPayload();
+
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = 'Đang gửi...';
+
+    try{
+      await fetch(WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: new URLSearchParams(payload)
+      });
+
+      document.getElementById('formWrap').style.display = 'none';
+      document.getElementById('submitBar').style.display = 'none';
+      document.getElementById('successScreen').style.display = 'block';
+    }catch(err){
+      showBanner('Gửi không thành công, kiểm tra mạng và thử lại.');
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = 'Gửi báo cáo';
+    }
+  });
+
+  document.getElementById('btnAgain').addEventListener('click', () => {
+    form.reset();
+    clearErrors();
+    document.getElementById('successScreen').style.display = 'none';
+    document.getElementById('formWrap').style.display = 'block';
+    document.getElementById('submitBar').style.display = 'flex';
+    btnSubmit.disabled = false;
+    btnSubmit.textContent = 'Gửi báo cáo';
+    window.scrollTo({top:0});
+  });
+</script>
+
+</body>
+</html>
