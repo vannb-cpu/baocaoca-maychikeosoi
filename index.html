@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<title>Báo cáo ca — Máy chỉ kéo sợi</title>
+<title>Báo cáo ca — Máy chỉ kéo sợi (Bao Bì)</title>
 <style>
   :root{
     --ink:#1c2430;
@@ -312,8 +312,8 @@
 <body>
 
 <header class="top">
-  <p class="eyebrow">Nhà máy Yên Bái · Xưởng Máy chỉ kéo sợi</p>
-  <h1>BÁO CÁO CA — MÁY CHỈ KÉO SỢI</h1>
+  <p class="eyebrow">Nhà máy Yên Bái · Xưởng Máy chỉ kéo sợi · BAO BÌ</p>
+  <h1>BÁO CÁO CA — MÁY CHỈ KÉO SỢI (BAO BÌ)</h1>
   <p>Tổ trưởng ca điền và gửi khi kết thúc ca. Ca chạy nhiều máy thì bấm "Thêm máy" để khai báo từng máy trong cùng 1 lần gửi.</p>
 </header>
 
@@ -342,18 +342,18 @@
           <div class="error-msg">Nhập ngày sản xuất.</div>
         </div>
 
-        <div class="field" data-required="true" data-name="Thuộc nhà máy nào">
-          <label class="q">Thuộc nhà máy nào<span class="req">*</span></label>
-          <div class="choice-grid cols-2">
-            <label class="choice"><input type="radio" name="nha_may" value="Bạt" data-field="nha_may"><span class="box">Bạt</span></label>
-            <label class="choice"><input type="radio" name="nha_may" value="Bao Bì" data-field="nha_may"><span class="box">Bao Bì</span></label>
-          </div>
-          <div class="error-msg">Chọn nhà máy.</div>
-        </div>
-
         <div class="field" data-required="true" data-name="Họ tên trưởng ca">
           <label class="q">Họ tên trưởng ca<span class="req">*</span></label>
-          <input type="text" name="ho_ten_truong_ca" data-field="ho_ten_truong_ca" placeholder="Nhập họ tên">
+          <select name="ho_ten_truong_ca" data-field="ho_ten_truong_ca">
+            <option value="" disabled selected>— Chọn tên —</option>
+            <option value="Lê Huỳnh Đức">Lê Huỳnh Đức</option>
+            <option value="Nguyễn Minh Đức">Nguyễn Minh Đức</option>
+            <option value="Đặng Đức Thiện">Đặng Đức Thiện</option>
+            <option value="Lý Hữu Ngọc">Lý Hữu Ngọc</option>
+            <option value="Dương Trung Tuấn">Dương Trung Tuấn</option>
+            <option value="Lý Hữu Xuân">Lý Hữu Xuân</option>
+            <option value="Triệu Đình Vượng">Triệu Đình Vượng</option>
+          </select>
           <div class="error-msg">Nhập họ tên trưởng ca.</div>
         </div>
 
@@ -438,20 +438,6 @@
 
       <div class="sub-head">Nguyên liệu &amp; sản lượng</div>
 
-      <div class="field" data-required="true" data-name="Loại nguyên liệu">
-        <label class="q">Loại nguyên liệu<span class="req">*</span></label>
-        <div class="choice-grid cols-2">
-          <label class="choice"><input type="radio" name="TEMPLATE__loai_nguyen_lieu" value="Phế PP" data-field="loai_nguyen_lieu"><span class="box">Phế PP</span></label>
-          <label class="choice"><input type="radio" name="TEMPLATE__loai_nguyen_lieu" value="Nguyên sinh" data-field="loai_nguyen_lieu"><span class="box">Nguyên sinh</span></label>
-          <label class="choice"><input type="radio" name="TEMPLATE__loai_nguyen_lieu" value="Taical" data-field="loai_nguyen_lieu"><span class="box">Taical</span></label>
-          <label class="choice"><input type="radio" name="TEMPLATE__loai_nguyen_lieu" value="Phối trộn" data-field="loai_nguyen_lieu"><span class="box">Phối trộn</span></label>
-        </div>
-        <div class="other-row">
-          <input type="text" data-field="loai_nguyen_lieu_khac" placeholder="Khác (nếu có, ghi rõ)">
-        </div>
-        <div class="error-msg">Chọn hoặc ghi rõ loại nguyên liệu.</div>
-      </div>
-
       <div class="field" data-name="Lượng nguyên liệu tiêu hao trong ca (kg)">
         <label class="q">Lượng nguyên liệu tiêu hao trong ca (kg)</label>
         <input type="number" inputmode="decimal" data-field="nl_tieu_hao_kg">
@@ -461,11 +447,6 @@
         <label class="q">Sản lượng thành phẩm trong ca (kg)<span class="req">*</span></label>
         <input type="number" inputmode="decimal" data-field="san_luong_kg">
         <div class="error-msg">Nhập sản lượng thành phẩm.</div>
-      </div>
-
-      <div class="field" data-name="Số cuộn sợi hoàn thành">
-        <label class="q">Số cuộn sợi hoàn thành</label>
-        <input type="number" inputmode="numeric" data-field="so_cuon_soi">
       </div>
 
       <div class="field" data-name="Lượng phế thải ra trong ca (kg)">
@@ -512,30 +493,6 @@
         <div class="other-row">
           <input type="text" data-field="ly_do_dung_may_khac" placeholder="Khác (nếu có, ghi rõ)">
         </div>
-      </div>
-
-      <div class="field" data-name="Vệ sinh/thông lỗ hút chân không">
-        <label class="q">Vệ sinh/thông lỗ hút chân không</label>
-        <div class="hint">Chỉ máy chỉ 1, 2</div>
-        <div class="choice-grid cols-3">
-          <label class="choice"><input type="radio" name="TEMPLATE__ve_sinh_hut_chan_khong" value="Có" data-field="ve_sinh_hut_chan_khong"><span class="box">Có</span></label>
-          <label class="choice"><input type="radio" name="TEMPLATE__ve_sinh_hut_chan_khong" value="không" data-field="ve_sinh_hut_chan_khong"><span class="box">Không</span></label>
-          <label class="choice"><input type="radio" name="TEMPLATE__ve_sinh_hut_chan_khong" value="không áp dụng" data-field="ve_sinh_hut_chan_khong"><span class="box">Không áp dụng</span></label>
-        </div>
-      </div>
-
-      <div class="field" data-required="true" data-name="Có sự cố thiết bị không?">
-        <label class="q">Có sự cố thiết bị không?<span class="req">*</span></label>
-        <div class="choice-grid cols-2">
-          <label class="choice"><input type="radio" name="TEMPLATE__co_su_co" value="Có" data-field="co_su_co"><span class="box">Có</span></label>
-          <label class="choice"><input type="radio" name="TEMPLATE__co_su_co" value="Không" data-field="co_su_co"><span class="box">Không</span></label>
-        </div>
-        <div class="error-msg">Chọn có/không.</div>
-      </div>
-
-      <div class="field" data-name="Mô tả sự cố thiết bị (nếu có)">
-        <label class="q">Mô tả sự cố thiết bị (nếu có)</label>
-        <textarea data-field="mo_ta_su_co"></textarea>
       </div>
 
       <div class="sub-head">Chất lượng sợi</div>
@@ -614,6 +571,7 @@
 
 <script>
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzP3BepKVrUfZaKPKl6nsu2DBoOSAoztCIs1UEncU2pCijNgZCqrQQmdafPbx2RHe_88g/exec";
+  const NHA_MAY = "Bao Bì";
 
   const form = document.getElementById('reportForm');
   const btnSubmit = document.getElementById('btnSubmit');
@@ -653,7 +611,7 @@
     ghi_chu_khac: 'Ghi chú khác'
   };
   const SHARED_ORDER = ['ca_lam_viec','ngay_san_xuat','nha_may','ho_ten_truong_ca','so_nguoi_lam'];
-  const MACHINE_ORDER = ['may_so','ma_san_pham','loai_nguyen_lieu','nl_tieu_hao_kg','san_luong_kg','so_cuon_soi','phe_thai_kg','nl_do_dang_kg','thay_luoi_so_cap','thay_luoi_thu_cap','thoi_gian_dung_may','ly_do_dung_may','ve_sinh_hut_chan_khong','co_su_co','mo_ta_su_co','luc_keo','dinh_luong_ban_soi','do_xo_xuoc','loi_soi_phat_hien','bu_chi_loi_kg','tinh_trang_may'];
+  const MACHINE_ORDER = ['may_so','ma_san_pham','nl_tieu_hao_kg','san_luong_kg','phe_thai_kg','nl_do_dang_kg','thay_luoi_so_cap','thay_luoi_thu_cap','thoi_gian_dung_may','ly_do_dung_may','luc_keo','dinh_luong_ban_soi','do_xo_xuoc','loi_soi_phat_hien','bu_chi_loi_kg','tinh_trang_may'];
   const HANDOVER_ORDER = ['de_xuat_ca_sau','ghi_chu_khac'];
 
   let blockCounter = 0;
@@ -710,12 +668,7 @@
       return Array.from(radios).some(r => r.checked);
     }
     const el = field.querySelector('input[type=text], input[type=number], input[type=date], select, textarea');
-    let filled = el ? (el.value !== null && el.value.toString().trim() !== '') : false;
-    if(!filled && field.dataset.name === 'Loại nguyên liệu'){
-      const khac = field.querySelector('input[data-field="loai_nguyen_lieu_khac"]');
-      filled = khac && khac.value.trim() !== '';
-    }
-    return filled;
+    return el ? (el.value !== null && el.value.toString().trim() !== '') : false;
   }
 
   function validate(){
@@ -755,7 +708,7 @@
   }
 
   function collectShared(){
-    const data = {};
+    const data = { nha_may: NHA_MAY };
     document.querySelectorAll('#formWrap > form > .section [data-field]').forEach(el => {
       if(el.type === 'radio'){
         if(el.checked) data[el.dataset.field] = el.value;
@@ -783,12 +736,6 @@
         }
       }
     });
-
-    // Gộp ô "Khác" vào giá trị chính, giống hành vi Google Form
-    if(data.loai_nguyen_lieu_khac && data.loai_nguyen_lieu_khac.trim() !== ''){
-      data.loai_nguyen_lieu = data.loai_nguyen_lieu_khac.trim();
-    }
-    delete data.loai_nguyen_lieu_khac;
 
     if(data.ly_do_dung_may_khac && data.ly_do_dung_may_khac.trim() !== ''){
       data.ly_do_dung_may = data.ly_do_dung_may
